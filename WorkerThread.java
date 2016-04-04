@@ -1,7 +1,7 @@
 /******************************************************************************
  * numCores instances of this class are instantiated. Overall, this file
  * does the algorithm - it performs linear scans over the entire chunk,
- * returns a new chunk that only contains significant p-values
+ * returns a new chunk that only contains significant p-values.
  ******************************************************************************/
 import java.util.ArrayList;
 import java.util.Iterator;
