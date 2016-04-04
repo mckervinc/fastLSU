@@ -150,7 +150,7 @@ public class FastBHConcurrent{
 
         double p = list[i].array[j];
         if (p != -1) {
-          System.out.printf((count%5==4) ? "%.11f\n" : "%.11f ", p);
+          System.out.printf((count%5==4) ? "%.3e\n" : "%.3e ", p);
           count++;
         }
       }
