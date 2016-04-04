@@ -14,10 +14,11 @@ public class WorkerThread implements Callable<PValues> {
   private static ResourceMonitor rm = FastBHConcurrent.rm;
 
   // constructor
-  public WorkerThread(PValues data, double m, double alpha) {
+  public WorkerThread(PValues data, double m, double alpha, String threadName) {
     this.data = data;
     this.m = m;
     this.alpha = alpha;
+    this.threadName = threadName;
   }
 
   /*****************************************************************************/
@@ -29,9 +30,8 @@ public class WorkerThread implements Callable<PValues> {
     while in parallel. This will ultimately perform the algorithm
   */
   public PValues call() throws Exception {
-    threadName = Thread.currentThread().getName();
     
-    // pass 1 - find r0 (p-values less than alpha)
+    // add the sum of a particular chunk to the resource monitor.
     notifier(0, data.prime);
     return kmax();
   }

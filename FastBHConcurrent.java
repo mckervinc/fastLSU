@@ -58,7 +58,7 @@ public class FastBHConcurrent{
       List<Future<PValues>> list = new ArrayList<Future<PValues>>();
       PValues[] arr = load();
       for (int i = 0; i < numCores; i++)
-        list.add(executor.submit(new WorkerThread(arr[i], mtg, alpha)));
+        list.add(executor.submit(new WorkerThread(arr[i], mtg, alpha, "pool-1-thread-" + str(i+1))));
 
       // get the result
       PValues[] union = new PValues[numCores];
@@ -165,7 +165,6 @@ public class FastBHConcurrent{
       ArrayList<String> values = splitter(line);
       for (int i = 0; i < values.size(); i++) {
         if (c == count) {
-          check(count);
           return;
         }
 
@@ -231,5 +230,9 @@ public class FastBHConcurrent{
     }
     arr.add(sb.toString());
     return arr;
+  }
+
+  private String str(int x) {
+    return Integer.toString(x);
   }
 }
