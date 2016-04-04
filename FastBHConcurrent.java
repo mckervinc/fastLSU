@@ -47,7 +47,7 @@ public class FastBHConcurrent{
   /*****************************************************************************/
   /*                            BH Calculations                                */
   /*****************************************************************************/
-  public void solver() throws IOException {
+  public ArrayList<Double> solver() throws IOException {
     
     /*
      * Find the max array size - if its less, perform in memory parallel
@@ -74,12 +74,13 @@ public class FastBHConcurrent{
       executor.shutdown();
 
       // return value
-      finished(union);
+      return finished(union);
     }
     else {
       FastBH fbh = new FastBH(filename, alpha, mtg);
       double[] condplusval = fbh.calculate();
       printFromFile(condplusval[0], condplusval[1]);
+      return new ArrayList<Double>();
     }
   }
 
@@ -138,24 +139,27 @@ public class FastBHConcurrent{
   /*                           Printing Functions                              */
   /*****************************************************************************/
 
-  public void finished(PValues[] list) {
+  public ArrayList<Double> finished(PValues[] list) {
     printTable();
+    ArrayList<Double> data = new ArrayList<Double>();
     double count = 0.0;
     for (int i = 0; i < list.length; i++) {
       for (int j = 0; j < list[i].array.length; j++) {
         if (count == mprime) {
           check(count);
-          return;
+          return data;
         }
 
         double p = list[i].array[j];
         if (p != -1) {
           System.out.printf((count%5==4) ? "%.3e\n" : "%.3e ", p);
           count++;
+          data.add(p);
         }
       }
     }
     check(count);
+    return data;
   }
 
   public void printTable() {
