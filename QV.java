@@ -28,6 +28,7 @@ public class QV {
       }
     }
 
+    Collections.sort(data);
     double[] result = new double[data.size()];
     double pr = data.get(data.size()-1);
     result[data.size()-1] = pr * m/((double)data.size());
