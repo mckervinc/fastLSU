@@ -19,4 +19,8 @@ public class PValues {
     System.arraycopy(b.array, 0, c.array, this.array.length, b.array.length);
     return c;
   }
+
+  public int size() {
+    return array.length;
+  }
 }

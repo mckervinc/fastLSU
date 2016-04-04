@@ -1,8 +1,8 @@
 import java.io.File;
 
 public class Test {
-	public static void main(String[] args) {
-		double m = Math.pow(10, 7);
+	public static void main(String[] args) throws Exception {
+		double m = 1 * Math.pow(10, 7);
 		double alpha = 0.1;
 		String path = "../Tests/test01.txt";
 		FastBHConcurrent fbhc = new FastBHConcurrent(m, alpha, (new File(path)).getAbsolutePath());
