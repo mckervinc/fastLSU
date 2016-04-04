@@ -5,7 +5,6 @@
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
-// private class that keeps track of the status of the variables
 public class ResourceMonitor {
 
   private class Tuple {
