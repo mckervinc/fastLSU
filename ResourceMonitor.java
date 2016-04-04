@@ -69,4 +69,16 @@ public class ResourceMonitor {
   public void remove(String key) {
     chm.remove(key);
   }
+
+  public void printTable() {
+    Iterator<String> it = iterator();
+    System.out.println("--------------------------------------------");
+    while (it.hasNext()) {
+      String key = it.next();
+      double val = getValue(key);
+      int step = getStep(key) + 1;
+      System.out.printf("%s: || Step: %d || value: %f\n", key, step, val);
+    }
+    System.out.println("--------------------------------------------");
+  }
 }

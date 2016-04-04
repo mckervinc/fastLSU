@@ -140,38 +140,20 @@ public class FastBHConcurrent{
   /*****************************************************************************/
 
   public ArrayList<Double> finished(PValues[] list) {
-    // printTable();
     ArrayList<Double> data = new ArrayList<Double>();
     double count = 0.0;
     for (int i = 0; i < list.length; i++) {
       for (int j = 0; j < list[i].array.length; j++) {
-        if (count == mprime) {
-          // check(count);
-          return data;
-        }
-
+        if (count == mprime) return data;
+        
         double p = list[i].array[j];
         if (p != -1) {
-          // System.out.printf((count%5==4) ? "%.3e\n" : "%.3e ", p);
           count++;
           data.add(p);
         }
       }
     }
-    // check(count);
     return data;
-  }
-
-  public void printTable() {
-    Iterator<String> it = rm.iterator();
-    System.out.println("--------------------------------------------");
-    while (it.hasNext()) {
-      String key = it.next();
-      double val = rm.getValue(key);
-      int step = rm.getStep(key) + 1;
-      System.out.printf("%s: || Step: %d || value: %f\n", key, step, val);
-    }
-    System.out.println("--------------------------------------------");
   }
 
   public void printFromFile(double condition, double count) throws IOException {
@@ -225,10 +207,6 @@ public class FastBHConcurrent{
   /*****************************************************************************/
   /*                           Helper Functions                                */
   /*****************************************************************************/
-
-  private void check(double count) {
-    System.out.print((count%5 == 0) ? "" : "\n");
-  }
 
   private ArrayList<String> splitter(String line) {
     ArrayList<String> arr = new ArrayList<String>(5);
