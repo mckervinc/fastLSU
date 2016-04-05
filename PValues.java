@@ -17,6 +17,7 @@ public class PValues {
     PValues c = new PValues(this.array.length + b.array.length);
     System.arraycopy(this.array, 0, c.array, 0, this.array.length);
     System.arraycopy(b.array, 0, c.array, this.array.length, b.array.length);
+    this.prime += b.prime;
     return c;
   }
 
