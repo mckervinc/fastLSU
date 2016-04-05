@@ -17,6 +17,6 @@ public class TimingFast {
 			time += timeinS;
 		}
 		double ms = time/((double)trials);
-		System.out.printf("Average run time over %d Trials: %.2f ms, or %.8f s\n", trials, ms, ms/1000.0);
+		System.out.printf("Average run time over %d Trial(s): %.2f ms, or %.8f s\n", trials, ms, ms/1000.0);
 	}
 }

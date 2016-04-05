@@ -31,7 +31,6 @@ public class TimingSlow {
 			SlowBH sbh = new SlowBH(data, alpha);
 			double [] res = sbh.kmax();
 			long end = System.currentTimeMillis();
-			printArr(res);
 			double timeinS = (double)(end - start);
 			time += timeinS;
 			br.close();
