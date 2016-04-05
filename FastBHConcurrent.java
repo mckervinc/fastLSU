@@ -185,8 +185,8 @@ public class FastBHConcurrent{
   // Split array indeces into the different chunks
   private void split(double size) {
     for (int i = 0; i < numCores; i++) {
-      chunks[i][0] = (size * i) / numCores;
-      chunks[i][1] = (size * (i + 1)) / numCores - 1;
+      chunks[i][0] = Math.floor((size * i) / numCores);
+      chunks[i][1] = Math.floor((size * (i + 1)) / numCores - 1);
     }
   }
 

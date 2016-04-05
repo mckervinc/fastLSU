@@ -2,9 +2,8 @@ import java.io.*;
 
 public class TimingSlow {
 	public static void printArr(double[] res) {
-		for (int i = 0; i < res.length; i++) {
+		for (int i = 0; i < res.length; i++)
 			System.out.printf((i%5==4) ? "%.3e\n" : "%.3e ", res[i]);
-		}
 		System.out.printf((res.length%5!=0) ? "\n": "");
 	}
 	public static void main(String[] args) throws Exception {
@@ -31,6 +30,7 @@ public class TimingSlow {
 			SlowBH sbh = new SlowBH(data, alpha);
 			double [] res = sbh.kmax();
 			long end = System.currentTimeMillis();
+			printArr(res);
 			double timeinS = (double)(end - start);
 			time += timeinS;
 			br.close();
