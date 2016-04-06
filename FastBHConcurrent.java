@@ -209,7 +209,8 @@ public class FastBHConcurrent{
   /*****************************************************************************/
 
   private ArrayList<String> splitter(String line) {
-    ArrayList<String> arr = new ArrayList<String>(5);
+    line = line.trim();
+    ArrayList<String> arr = new ArrayList<String>();
     boolean first = true;
     StringBuilder sb = new StringBuilder();
     for (int i = 0; i < line.length(); i++) {

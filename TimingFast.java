@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.*;
 
 public class TimingFast {
+	
 	public static void printArrList(ArrayList<Double> data) {
 		Collections.sort(data);
 		for (int i = 0; i < data.size(); i++)
@@ -19,7 +20,7 @@ public class TimingFast {
 			FastBHConcurrent fbhc = new FastBHConcurrent(m, alpha, (new File(args[3])).getAbsolutePath());
 			long start = System.currentTimeMillis();
 			ArrayList<Double> data = fbhc.solver();
-			printArrList(data);
+			// printArrList(data);
 			long end = System.currentTimeMillis();
 			double timeinS = (double)(end - start);
 			time += timeinS;
