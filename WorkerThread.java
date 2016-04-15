@@ -84,7 +84,7 @@ public class WorkerThread implements Callable<PValues> {
         return new PValues(0);
       }
       double sum2 = cumSum(step, rciprime);
-      if (sum1 == sum2 || step == m) {
+      if (sum1 == sum2) {
         data.prime = rciprime;
         break;
       }

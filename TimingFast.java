@@ -18,8 +18,9 @@ public class TimingFast {
 		double time = 0;
 		for (int i = 0; i < trials; i++) {
 			FastBHConcurrent fbhc = new FastBHConcurrent(m, alpha, (new File(args[3])).getAbsolutePath());
+			PValues[] arr = fbhc.load();
 			long start = System.currentTimeMillis();
-			ArrayList<Double> data = fbhc.solver();
+			ArrayList<Double> data = fbhc.solver(arr);
 			// printArrList(data);
 			long end = System.currentTimeMillis();
 			double timeinS = (double)(end - start);

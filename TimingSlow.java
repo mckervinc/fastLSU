@@ -21,7 +21,6 @@ public class TimingSlow {
 
 		for (int i = 0; i < trials; i++) {
 			BufferedReader br = new BufferedReader(new FileReader((new File(args[3])).getAbsolutePath()));
-			long start = System.currentTimeMillis();
 			while ((line=br.readLine()) != null) {
 				String[] values = line.split(" ");
 				for (int j = 0; j < values.length; j++) {
@@ -29,6 +28,7 @@ public class TimingSlow {
 					pointer++;			
 				}
 			}
+			long start = System.currentTimeMillis();
 			SlowBH sbh = new SlowBH(data, alpha);
 			double [] res = sbh.kmax();
 			long end = System.currentTimeMillis();

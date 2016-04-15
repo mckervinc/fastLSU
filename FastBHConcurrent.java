@@ -48,7 +48,7 @@ public class FastBHConcurrent{
   /*****************************************************************************/
   /*                            BH Calculations                                */
   /*****************************************************************************/
-  public ArrayList<Double> solver() throws IOException {
+  public ArrayList<Double> solver(PValues[] arr) throws IOException {
     
     /*
      * Find the max array size - if its less, perform in memory parallel
@@ -57,7 +57,6 @@ public class FastBHConcurrent{
     if (mtg <= limit()) {
       ExecutorService executor = Executors.newFixedThreadPool(numCores);
       List<Future<PValues>> list = new ArrayList<Future<PValues>>();
-      PValues[] arr = load();
       for (int i = 0; i < numCores; i++)
         list.add(executor.submit(new WorkerThread(arr[i], mtg, alpha, "pool-1-thread-" + str(i+1))));
 
@@ -88,7 +87,7 @@ public class FastBHConcurrent{
   /*****************************************************************************/
   /*                            Reading Functions                              */
   /*****************************************************************************/
-  private PValues[] load() throws IOException {
+  public PValues[] load() throws IOException {
     // local variables
     PValues[] result = new PValues[numCores];
     PValues elem = new PValues(chunks[0][1] - chunks[0][0] + 1);
