@@ -1,7 +1,5 @@
 /*
  * Performs fastLSU in parallel over the read data.
- * Note: Consider algorithm 1 in paper for increasing
- * performance for out-of-memory tests
 */
 import java.io.File;
 import java.io.BufferedReader;
