@@ -33,7 +33,29 @@ public class WorkerThread implements Callable<PValues> {
     
     // add the sum of a particular chunk to the resource monitor.
     notifier(0, data.prime);
-    return kmax();
+
+    // finds the cumulative sum over multiple iterations
+    double sum1 = rm.sum();
+    double condition = sum1 * alpha/m;
+    int step = 1;
+
+    while(true) {
+      double rciprime = kmax(condition, step);
+      if (rciprime == 0.0) {
+        rm.remove(threadName);
+        return new PValues(0);
+      }
+      double sum2 = cumSum(step, rciprime);
+      if (sum1 == sum2) {
+        data.prime = rciprime;
+        break;
+      }
+      condition = sum2 * alpha/m;
+      sum1 = sum2;
+      step++;
+    }
+
+    return data;
   }
 
   /*****************************************************************************/
@@ -70,37 +92,8 @@ public class WorkerThread implements Callable<PValues> {
   /*                            BH Calculations                                */
   /*****************************************************************************/
 
-  //Performs the algorithm. Once the kth step == k+1th step, break  
-  private PValues kmax() {
-    
-    double sum1 = rm.sum();
-    double condition = sum1 * alpha/m;
-    int step = 1;
-
-    while(true) {
-      double rciprime = counter(condition, step);
-      if (rciprime == 0.0) {
-        rm.remove(threadName);
-        return new PValues(0);
-      }
-      double sum2 = cumSum(step, rciprime);
-      if (sum1 == sum2) {
-        data.prime = rciprime;
-        break;
-      }
-      condition = sum2 * alpha/m;
-      sum1 = sum2;
-      step++;
-    }
-
-    return data;
-  }
-
-  /*
-    Goes through the array, checking if the pvalues support the condition of
-    being < alpha * kmax.r/m
-  */
-  private double counter(double cond, int step) {
+  // performs the algorithm
+  private double kmax(double cond, int step) {
     double count = 0.0;
     for (int i = 0; i < data.array.length; i++) {
       double p = data.array[i];

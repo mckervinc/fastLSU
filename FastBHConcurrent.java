@@ -70,7 +70,6 @@ public class FastBHConcurrent{
     executor.shutdown();
 
     // return value
-    arr = null;
     return finished(union);
   }
 
