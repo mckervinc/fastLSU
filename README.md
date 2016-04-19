@@ -10,4 +10,4 @@ then return PValues, which hold the final result.
 --Simplified WorkerThread to prevent parallel disk reads on the same file (this
 caused too many seeks on a given hard-drive)
 --Added small performance tweaks
---Must alter FastBH for low-memory machines and/or tests on the order of 10^9.
+--Added case when results do not fit into memory
