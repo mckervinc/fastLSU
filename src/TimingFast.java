@@ -2,6 +2,12 @@ import java.io.*;
 import java.util.*;
 
 public class TimingFast {
+
+	public static String fixedLengthString(int trial, long mid) {
+		String i = Integer.toString(trial);
+		String j = Long.toString(mid);
+		return String.format("%1$-12s||   %2$-19s||  ", i, j);
+	}
 	
 	public static void printArrList(ArrayList<Double> data) {
 		if (data == null) return;
@@ -18,14 +24,22 @@ public class TimingFast {
 		double alpha = Double.parseDouble(args[1]);
 		double time = 0;
 		ArrayList<Double> data = null;
+		System.out.println("===========================================================");
+		System.out.println("Trial       ||     Load Time (ms)   || Proc Time (ms)");
+		System.out.println("===========================================================");
 		for (int i = 0; i < trials; i++) {
 			FastBHConcurrent fbhc = new FastBHConcurrent(m, alpha, (new File(args[3])).getAbsolutePath());
 			if (fbhc.fitsInMem()) {
-				PValues[] arr = fbhc.load();
 				long start = System.currentTimeMillis();
+				PValues[] arr = fbhc.load();
+				long mid = System.currentTimeMillis();
+				String p = fixedLengthString(i+1, (mid-start));
+				System.out.print(p);
+				mid = System.currentTimeMillis();
 				data = fbhc.solver(arr);
 				long end = System.currentTimeMillis();
-				double timeinS = (double)(end - start);
+				double timeinS = (double)(end - mid);
+				System.out.println(timeinS);
 				time += timeinS;
 			}
 			else {
@@ -36,8 +50,9 @@ public class TimingFast {
 			}
 		}
 		double ms = time/((double)trials);
-		System.out.printf("Average run time over %d Trial(s): %.2f ms, or %.8f s\n", trials, ms, ms/1000.0);
-		System.out.println("=============================");
+		System.out.println("===========================================================");
 		printArrList(data);
+		System.out.println("===========================================================");
+		System.out.printf("Average run time over %d Trial(s): %.2f ms, or %.8f s\n", trials, ms, ms/1000.0);
 	}
 }
