@@ -293,17 +293,32 @@ public class FastBHConcurrent{
     // local variables
     PValues elem = new PValues(chunks[coreCount][1] - chunks[coreCount][0] + 1);
     int size = elem.size();
-    double rci = 0.0, sum = 0.0;
+    double rci = 0.0, sum = 0.0, p = 0.0, oldrci = 0.0;
 
     String line;
     while((line=buf.readLine()) != null) {
       ArrayList<String> values = splitter(line);
       for (int i = 0; i < values.size(); i++) {
-        if (pointer == size) {
-          elem.prime = rci;
+        try {
+          p = Double.parseDouble(values.get(i));
+          oldrci = rci;
+          if (p < alpha) rci++;
+          elem.array[pointer] = p;
+          pointer++;
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+          if (rci != oldrci) {
+            elem.prime = oldrci;
+            sum += oldrci;
+            rci = 1.0;
+          }
+          else {
+            elem.prime = rci;
+            sum += rci;
+            rci = 0.0;
+          }
           result[coreCount] = elem;
-          sum += rci;
-          rci = 0.0;
+          oldrci = rci;
           coreCount++;
           if (coreCount == allCores) {
             prevLine = values;
@@ -311,30 +326,17 @@ public class FastBHConcurrent{
             rm.changeSum(0, sum);
             return result;
           }
-          pointer = 0;
+          pointer = 1;
           elem = new PValues(chunks[coreCount][1] - chunks[coreCount][0] + 1);
           size = elem.size();
+          elem.array[0] = p;
         }
-
-        double p = Double.parseDouble(values.get(i));
-        if (p < alpha) rci++;
-        elem.array[pointer] = p;
-        pointer++;
-      }
-
-      if (pointer == size) {
-        elem.prime = rci;
-        result[coreCount] = elem;
-        pointer = 0;
-        sum += rci;
-        rci = 0.0;
-        coreCount++;
-        if (coreCount == allCores) break;
-        elem = new PValues(chunks[coreCount][1] - chunks[coreCount][0] + 1);
-        size = elem.size();
       }
     }
-
+  
+    elem.prime = rci;
+    result[coreCount] = elem;
+    sum += rci;
     prevLine = null;
     idx = 0;
     rm.changeSum(0, sum);

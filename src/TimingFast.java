@@ -50,7 +50,11 @@ public class TimingFast {
 		}
 		double ms = time/((double)trials);
 		System.out.println("===========================================================");
-		if (data != null) printArrList(data);
+		if (data != null) {
+			printArrList(data);
+			System.out.println("===========================================================");
+			System.out.println("Result size: " + data.size());
+		}
 		System.out.println("===========================================================");
 		System.out.printf("Average run time over %d Trial(s): %.2f ms, or %.8f s\n", trials, ms, ms/1000.0);
 	}
