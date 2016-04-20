@@ -1,6 +1,12 @@
 import java.io.*;
 
 public class TimingSlow {
+
+	public static String fixedLengthString(int trial, long mid) {
+		String i = Integer.toString(trial);
+		String j = Long.toString(mid);
+		return String.format("%1$-12s||   %2$-19s||  ", i, j);
+	}
 	
 	public static void printArr(double[] res) {
 		for (int i = 0; i < res.length; i++)
@@ -18,8 +24,12 @@ public class TimingSlow {
 		double time = 0;
 
 		String line;
-
+		double[] res = null;
+		System.out.println("===========================================================");
+		System.out.println("Trial       ||     Load Time (ms)   || Proc Time (ms)");
+		System.out.println("===========================================================");
 		for (int i = 0; i < trials; i++) {
+			long start = System.currentTimeMillis();
 			BufferedReader br = new BufferedReader(new FileReader((new File(args[3])).getAbsolutePath()));
 			while ((line=br.readLine()) != null) {
 				String[] values = line.split(" ");
@@ -28,17 +38,23 @@ public class TimingSlow {
 					pointer++;			
 				}
 			}
-			long start = System.currentTimeMillis();
+			long mid = System.currentTimeMillis();
+			String p = fixedLengthString(i+1, (mid-start));
+			System.out.print(p);
+			mid = System.currentTimeMillis();
 			SlowBH sbh = new SlowBH(data, alpha);
-			double [] res = sbh.kmax();
+			res = sbh.kmax();
 			long end = System.currentTimeMillis();
-			// printArr(res);
-			double timeinS = (double)(end - start);
+			double timeinS = (double)(end - mid);
+			System.out.println(timeinS);
 			time += timeinS;
 			br.close();
 			pointer = 0;
 		}
 		double ms = time/((double)trials);
+		System.out.println("===========================================================");
+		if (res != null) printArr(res);
+		System.out.println("===========================================================");
 		System.out.printf("Average run time over %d Trials: %.2f ms, or %.8f s\n", trials, ms, ms/1000.0);
 	}
 }

@@ -57,8 +57,10 @@ public class MemoryThread implements Callable<PValues> {
     double count = 0.0;
     for (int i = 0; i < data.array.length; i++) {
       double p = data.array[i];
-      if (p != -1 && p < cond) count++;
-      else data.array[i] = -1;
+      if (p != -1) {
+        if (p < cond) count++;
+        else data.array[i] = -1;
+      }
     }
     return count;
   }

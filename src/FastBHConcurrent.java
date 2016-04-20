@@ -45,7 +45,7 @@ public class FastBHConcurrent{
   /*****************************************************************************/
   /*                            BH Calculations                                */
   /*****************************************************************************/
-  public ArrayList<Double> solver(PValues[] arr) throws IOException {
+  public final ArrayList<Double> solver(PValues[] arr) throws IOException {
     
     // start each thread with the given data
     ExecutorService executor = Executors.newFixedThreadPool(numCores);
@@ -71,7 +71,7 @@ public class FastBHConcurrent{
     return finished(union);
   }
 
-  public ArrayList<Double> solverInMem(PValues[] arr) throws IOException {
+  public final ArrayList<Double> solverInMem(PValues[] arr) throws IOException {
     // get current number of tests
     double tests = 0.0;
     for (int i = 0; i < arr.length; i++)
@@ -207,7 +207,7 @@ public class FastBHConcurrent{
   /*****************************************************************************/
 
   // default load, when the entire thing fits in memory
-  public PValues[] load() throws IOException {
+  public final PValues[] load() throws IOException {
     buf = new BufferedReader(new FileReader(filename));
     PValues[] result = reader((new PValues[numCores]), 0, 0, numCores);
     buf.close();
@@ -215,7 +215,7 @@ public class FastBHConcurrent{
   }
 
   // this is used when there isn't enough memory
-  public PValues[] loadInMem() throws IOException {
+  public final PValues[] loadInMem() throws IOException {
     // split the size into appropriate cores
     double lim = limit();
     int allCores = numCores;
@@ -288,7 +288,7 @@ public class FastBHConcurrent{
   }
 
   // go through the file, checking for values less than alpha and return the tests
-  private PValues[] reader(PValues[] result, int coreCount, int pointer, int allCores)
+  private final PValues[] reader(PValues[] result, int coreCount, int pointer, int allCores)
   throws IOException {
     // local variables
     PValues elem = new PValues(chunks[coreCount][1] - chunks[coreCount][0] + 1);
@@ -342,7 +342,7 @@ public class FastBHConcurrent{
   }
 
   // skips the first fileSize - lim values, returns the rest in memory
-  private PValues[] skipper(double fileSize, double lim) throws IOException {
+  private final PValues[] skipper(double fileSize, double lim) throws IOException {
     // skip the first few numbers, then read limit() sized numbers
     // until the end of "tmp.txt" is reached
     PValues result = new PValues(lim);

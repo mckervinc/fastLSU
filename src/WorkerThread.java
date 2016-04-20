@@ -29,7 +29,7 @@ public class WorkerThread implements Callable<PValues> {
     The call() function is part of the Callable class. Gets called automatically
     while in parallel. This will ultimately perform the algorithm
   */
-  public PValues call() throws Exception {
+  public final PValues call() throws Exception {
     
     // add the sum of a particular chunk to the resource monitor.
     notifier(0, data.prime);
@@ -48,14 +48,12 @@ public class WorkerThread implements Callable<PValues> {
       double sum2 = cumSum(step, rciprime);
       if (sum1 == sum2) {
         data.prime = rciprime;
-        break;
+        return data;
       }
       condition = sum2 * alpha/m;
       sum1 = sum2;
       step++;
     }
-
-    return data;
   }
 
   /*****************************************************************************/
@@ -93,12 +91,14 @@ public class WorkerThread implements Callable<PValues> {
   /*****************************************************************************/
 
   // performs the algorithm
-  private double kmax(double cond, int step) {
+  private final double kmax(double cond, int step) {
     double count = 0.0;
     for (int i = 0; i < data.array.length; i++) {
       double p = data.array[i];
-      if (p != -1 && p < cond) count++;
-      else data.array[i] = -1;
+      if (p != -1) {
+        if (p < cond) count++;
+        else data.array[i] = -1;
+      }
     }
     notifier(step, count);
     return count;

@@ -10,7 +10,6 @@ public class TimingFast {
 	}
 	
 	public static void printArrList(ArrayList<Double> data) {
-		if (data == null) return;
 		Collections.sort(data);
 		for (int i = 0; i < data.size(); i++)
 			System.out.printf((i%5==4) ? "%.3e\n" : "%.3e ", data.get(i));
@@ -51,7 +50,7 @@ public class TimingFast {
 		}
 		double ms = time/((double)trials);
 		System.out.println("===========================================================");
-		printArrList(data);
+		if (data != null) printArrList(data);
 		System.out.println("===========================================================");
 		System.out.printf("Average run time over %d Trial(s): %.2f ms, or %.8f s\n", trials, ms, ms/1000.0);
 	}

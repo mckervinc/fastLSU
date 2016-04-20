@@ -6,19 +6,12 @@ public class SlowBH {
 	private double m;
 	private double[] pvalues;
 	double alpha;
-	// private double[] collection;
 
 	public SlowBH(double[] arg, double alpha) {
 		m = (double) arg.length;
-		// long start = System.currentTimeMillis();
 		Arrays.sort(arg);
-		// long end = System.currentTimeMillis();
-		// System.out.println("Sort time: " + (end - start) + " ms, or " + (double)(end - start)/1000.0 + " second(s)");
 		pvalues = arg;
 		this.alpha = alpha;
-		// collection = new double[(int)m];
-		// for (int i = 0; i < collection.length; i++)
-			// collection[i] = ((double) (i+1))*alpha/m;
 	}
 
 	private void print(double[] arg, int x, String s) {
