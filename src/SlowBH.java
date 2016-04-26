@@ -24,35 +24,23 @@ public class SlowBH {
 		being < alpha * kmax.r/m
 	*/
 	public double[] kmax() {
-		int from = 0;
-		int to = 0;
+		int to = -1;
 
 		// find from index, should be continuous since pvales
 		// are sorted
 		for (int i = 0; i < pvalues.length; i++) {
-			if (pvalues[i] < ((double) (i+1))*alpha/m) {
-				from = i;
-				break;
-			}
+			if (pvalues[i] < ((double) (i+1))*alpha/m) to = i;
 		}
 
-		// find the to index
-		for (int i = from+1; i < pvalues.length; i++) {
-			if (pvalues[i] >= ((double) (i+1))*alpha/m) {
-				to = i;
-				break;
-			}
-		}
-
-		pvalues = range(pvalues, 0, to);
+		pvalues = range(pvalues, to+1);
 		return pvalues;
 	}
 
 	// [from, to)
-	private double[] range(double[] arg, int from, int to) {
-		double[] result = new double[to - from];
-		for (int i = from; i < to; i++)
-			result[i - from] = arg[i];
+	private double[] range(double[] arg, int to) {
+		double[] result = new double[to];
+		for (int i = 0; i < to; i++)
+			result[i] = arg[i];
 		return result;	
 	}
 

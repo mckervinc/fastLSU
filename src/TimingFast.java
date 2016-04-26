@@ -21,7 +21,8 @@ public class TimingFast {
 		int m = Integer.parseInt(args[2]);
 
 		double alpha = Double.parseDouble(args[1]);
-		double time = 0;
+		double time = 0, loadTime = 0;
+		boolean first = true;
 		ArrayList<Double> data = null;
 		System.out.println("===========================================================");
 		System.out.println("Trial       ||     Load Time (ms)   || Proc Time (ms)");
@@ -32,14 +33,19 @@ public class TimingFast {
 				long start = System.currentTimeMillis();
 				PValues[] arr = fbhc.load();
 				long mid = System.currentTimeMillis();
-				String p = fixedLengthString(i+1, (mid-start));
+				long lt = mid - start;
+				String p = fixedLengthString(i+1, lt);
 				System.out.print(p);
 				mid = System.currentTimeMillis();
 				data = fbhc.solver(arr);
 				long end = System.currentTimeMillis();
 				double timeinS = (double)(end - mid);
 				System.out.println(timeinS);
-				time += timeinS;
+				if (!first) {
+					time += timeinS;
+					loadTime += lt;
+				}
+				first = false;
 			}
 			else {
 				while(!fbhc.isFinished()) {
@@ -48,7 +54,8 @@ public class TimingFast {
 				}
 			}
 		}
-		double ms = time/((double)trials);
+		double ms = time/((double)trials-1.0);
+		double ls = loadTime/((double)trials-1.0);
 		System.out.println("===========================================================");
 		if (data != null) {
 			printArrList(data);
@@ -56,6 +63,7 @@ public class TimingFast {
 			System.out.println("Result size: " + data.size());
 		}
 		System.out.println("===========================================================");
-		System.out.printf("Average run time over %d Trial(s): %.2f ms, or %.8f s\n", trials, ms, ms/1000.0);
+		System.out.printf("Average run time over %d Trial(s):  %.2f ms, or %.8f s\n", trials-1, ms, ms/1000.0);
+		System.out.printf("Average load time over %d Trial(s): %.2f ms, or %.8f s\n", trials-1, ls, ls/1000.0);
 	}
 }

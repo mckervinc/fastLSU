@@ -497,7 +497,7 @@ public class FastBHConcurrent{
   /*                           Helper Functions                                */
   /*****************************************************************************/
 
-  private ArrayList<String> splitter(String line) {
+  private final ArrayList<String> splitter(String line) {
     line = line.trim();
     ArrayList<String> arr = new ArrayList<String>();
     boolean first = true;
