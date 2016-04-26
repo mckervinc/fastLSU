@@ -534,4 +534,8 @@ public class FastBHConcurrent{
   public boolean isFinished() {
     return bigSize == 0.0;
   }
+
+  public double[][] theChunks() {
+    return chunks;
+  }
 }
