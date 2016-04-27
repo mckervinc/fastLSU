@@ -3,7 +3,7 @@
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
   <jar>E:\Dropbox\School\College\Senior Year\Thesis\Code\Parallel\fastlsu.jar</jar>
-  <outfile>E:\Dropbox\School\College\Senior Year\Thesis\Code\Parallel\FastLSU2.exe</outfile>
+  <outfile>E:\Dropbox\School\College\Senior Year\Thesis\Code\Parallel\winexe\FastLSU.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>

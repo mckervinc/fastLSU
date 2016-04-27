@@ -24,7 +24,6 @@ public class FastLSU extends Application {
 
     @Override
     public void start(Stage stage) {
-        System.out.println(Runtime.getRuntime().maxMemory());
         stage.setTitle("FastLSU");
         Scene scene = new Scene(new VBox(), 400, 350);
 
@@ -117,10 +116,9 @@ public class FastLSU extends Application {
                             long start = System.currentTimeMillis();
                             ArrayList<Double> result = fbhc.solver(arr);
                             long end = System.currentTimeMillis();
-                            printArrList(result);
                             System.out.println("==============================");
                             System.out.println("Elapsed Time (ms): " + (end - start));
-                            ResultWindow.display(result, null, false);
+                            ResultWindow.display(result, null, false, size);
                         } catch (Exception e) {e.printStackTrace();}
                     }
                     else errors.getChildren().add(a);
@@ -155,10 +153,9 @@ public class FastLSU extends Application {
                         long start = System.currentTimeMillis();
                         double[] result = QV.qValues(size, arr);
                         long end = System.currentTimeMillis();
-                        printArr(result);
                         System.out.println("==============================");
                         System.out.println("Elapsed Time (ms): " + (end - start));
-                        ResultWindow.display(null, result, true);
+                        ResultWindow.display(null, result, true, size);
                     } catch (Exception e) {e.printStackTrace();}
                 }
             }
@@ -202,17 +199,5 @@ public class FastLSU extends Application {
             return true;
         }
         catch (Exception e) {return false;}
-    }
-
-    private void printArrList(ArrayList<Double> data) {
-        for (int i = 0; i < data.size(); i++)
-            System.out.printf((i%5==4) ? "%.3e\n" : "%.3e ", data.get(i));
-        System.out.printf((data.size()%5!=0) ? "\n" : "");
-    }
-
-    private void printArr(double[] data) {
-        for (int i = 0; i < data.length; i++)
-            System.out.printf((i%5==4) ? "%.3e\n" : "%.3e ", data[i]);
-        System.out.printf((data.length%5!=0) ? "\n" : "");
     }
 }

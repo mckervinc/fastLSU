@@ -12,17 +12,17 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
 public class ResultWindow {
-	private static final String QVTitle = "Q-Values (or Adjusted P-values)";
-	private static final String PVTitle = "Significant Tests";
+    private static final String QVTitle = "Q-Values (or Adjusted P-values)";
+    private static final String PVTitle = "Significant Tests";
 
-	public static void display(ArrayList<Double> list, double[] arr, boolean isQV) {
-		Stage window = new Stage();
-		window.initModality(Modality.APPLICATION_MODAL);
-		window.setTitle((isQV) ? QVTitle : PVTitle);
+    public static void display(ArrayList<Double> list, double[] arr, boolean isQV, double size) {
+        Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setTitle((isQV) ? QVTitle : PVTitle);
 
-		TableView table = new TableView<>();
-		table.setEditable(true);
- 
+        TableView table = new TableView<>();
+        table.setEditable(true);
+
         TableColumn<TableData, String> c1 = new TableColumn("1");
         TableColumn<TableData, String> c2 = new TableColumn("2");
         TableColumn<TableData, String> c3 = new TableColumn("3");
@@ -49,53 +49,61 @@ public class ResultWindow {
         Menu menuFile = new Menu("File");
         MenuItem save = new MenuItem("Export to *.txt");
         save.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent t) {
-				FileChooser fileChooser = new FileChooser();
-				fileChooser.setTitle("Save Data");
-			    File file = fileChooser.showSaveDialog(window);
+            public void handle(ActionEvent t) {
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Save Data");
+                File file = fileChooser.showSaveDialog(window);
                 if (file != null) {
-                	try {
-                		PrintWriter p = new PrintWriter(new BufferedWriter(new FileWriter(file.getAbsolutePath(), true)));
-                		printData(list, arr, p);
-                		p.close();
-                	}
-                	catch (Exception e) {e.printStackTrace();}
+                    try {
+                        PrintWriter p = new PrintWriter(new BufferedWriter(new FileWriter(file.getAbsolutePath(), true)));
+                        printData(list, arr, p);
+                        p.close();
+                    }
+                    catch (Exception e) {e.printStackTrace();}
                 }
-			}
-		});
-
-        menuFile.getItems().addAll(save);
+            }
+        });
+        MenuItem qv = new MenuItem("Find q-values");
+        qv.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                long start = System.currentTimeMillis();
+                double[] result = QV.qValues(size, list);
+                long end = System.currentTimeMillis();
+                ResultWindow.display(null, result, true, size);
+                System.out.println("Elapsed time (ms): " + (end - start));
+            }
+        });
+        if (!isQV) menuFile.getItems().addAll(save, qv);
+        else menuFile.getItems().addAll(save);
         menuBar.getMenus().addAll(menuFile);
         VBox vBox = new VBox();
         vBox.getChildren().addAll(menuBar, table);
         Scene scene = new Scene(vBox);
         window.setScene(scene);
         window.show();
-	}
+    }
 
-	public static ObservableList<TableData> populate(ArrayList<Double> list, double[] arr) {
-		ObservableList<TableData> result = FXCollections.observableArrayList();
-		
-		int size = (list != null) ? list.size() : arr.length;
-		for (int i = 0; i < size; i+=5)
-			result.add(new TableData(list, arr, i, Math.min(i+5, size)));
-		return result;
-	}
+    public static ObservableList<TableData> populate(ArrayList<Double> list, double[] arr) {
+        ObservableList<TableData> result = FXCollections.observableArrayList();
+        
+        int size = (list != null) ? list.size() : arr.length;
+        for (int i = 0; i < size; i+=5)
+            result.add(new TableData(list, arr, i, Math.min(i+5, size)));
+        return result;
+    }
 
-	private static double get(ArrayList<Double> list, double[] arr, int index) {
-		return (list != null) ? list.get(index) : arr[index];
-	}
+    private static double get(ArrayList<Double> list, double[] arr, int index) {
+        return (list != null) ? list.get(index) : arr[index];
+    }
 
-	private static void printData(ArrayList<Double> list, double[] arr, PrintWriter pw) {
-		int size = (list != null) ? list.size() : arr.length;
-		int format = 0;
-		for (int i = 0; i < size; i++) {
-			double p = get(list, arr, i);
-			if (p != -1) {
-				pw.printf((format%5==4) ? "%.7e\n" : "%.7e ", p);
-				format++;
-			}
-		}
-	}
+    private static void printData(ArrayList<Double> list, double[] arr, PrintWriter pw) {
+        int size = (list != null) ? list.size() : arr.length;
+        int format = 0;
+        for (int i = 0; i < size; i++) {
+            double p = get(list, arr, i);        
+            pw.printf((format%5==4) ? "%.7e\n" : "%.7e ", p);
+            format++;
+        }
+    }
 
 }
