@@ -24,6 +24,7 @@ public class FastLSU extends Application {
 
     @Override
     public void start(Stage stage) {
+        System.out.println(Runtime.getRuntime().maxMemory());
         stage.setTitle("FastLSU");
         Scene scene = new Scene(new VBox(), 400, 350);
 

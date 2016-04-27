@@ -7,6 +7,9 @@ The main program begins with FastBHConcurrent.java - from there a ResourceMonito
 monitors the number of p-values in each instance of the WorkerThread. The threads
 then return PValues, which hold the final result.
 
+To run the program, simply double click the executable JAR file and follow the instructions.
+There are windows binaries as well which should allow for more memory usage (OS X wrapper to come).
+
 --Simplified WorkerThread to prevent parallel disk reads on the same file (this
 caused too many seeks on a given hard-drive)
 --Added small performance tweaks
