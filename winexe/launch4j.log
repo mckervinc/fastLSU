@@ -50,3 +50,29 @@ Launcher:	C:\Program Files\Java\jre1.8.0_77\bin\javaw.exe
 Launcher args:	-Xmx2956m -jar "E:\Dropbox\School\College\Senior Year\Thesis\Code\Parallel\winexe\FastLSU.exe"
 Args length:	94/32768 chars
 Exit code:	0
+
+
+Version:	3.8
+CmdLine:	E:\Dropbox\School\College\Senior Year\Thesis\Code\Parallel\winexe\FastLSU.exe --l4j-debug
+WOW64:		yes
+Working dir:	E:\Dropbox\School\College\Senior Year\Thesis\Code\Parallel\winexe\.
+64-bit search:	SOFTWARE\JavaSoft\Java Runtime Environment...
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8
+Check launcher:	C:\Program Files\Java\jre1.8.0_77\bin\javaw.exe (OK)
+Match:		1.8
+Check:		SOFTWARE\JavaSoft\Java Runtime Environment\1.8.0_77
+Check launcher:	C:\Program Files\Java\jre1.8.0_77\bin\javaw.exe (OK)
+Match:		1.8.0_77
+64-bit search:	SOFTWARE\JavaSoft\Java Development Kit...
+Check:		SOFTWARE\JavaSoft\Java Development Kit\1.8
+Ignore:		1.8
+Check:		SOFTWARE\JavaSoft\Java Development Kit\1.8.0_31
+Ignore:		1.8.0_31
+Check:		SOFTWARE\JavaSoft\Java Development Kit\1.8.0_74
+Ignore:		1.8.0_74
+Runtime used:	1.8.0_77 (64-bit)
+Heap -Xmx:	Requested 0 MB / 75%, Available: 3795 MB, Heap size: 2846 MB
+Launcher:	C:\Program Files\Java\jre1.8.0_77\bin\javaw.exe
+Launcher args:	-Xmx2846m -jar "E:\Dropbox\School\College\Senior Year\Thesis\Code\Parallel\winexe\FastLSU.exe"
+Args length:	94/32768 chars
+Exit code:	0

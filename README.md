@@ -14,3 +14,4 @@ There are windows binaries as well which should allow for more memory usage (OS 
 caused too many seeks on a given hard-drive)
 --Added small performance tweaks
 --Added case when results do not fit into memory
+--Fixed ResourceMonitor bug that prevented it from being cleared after each iteration
