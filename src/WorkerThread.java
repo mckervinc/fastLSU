@@ -11,14 +11,15 @@ public class WorkerThread implements Callable<PValues> {
   private double m, alpha;
   private PValues data;
   private String threadName;
-  private static ResourceMonitor rm = FastBHConcurrent.rm;
+  private final ResourceMonitor rm;
 
   // constructor
-  public WorkerThread(PValues data, double m, double alpha, String threadName) {
+  public WorkerThread(PValues data, double m, double alpha, String threadName, ResourceMonitor rm) {
     this.data = data;
     this.m = m;
     this.alpha = alpha;
     this.threadName = threadName;
+    this.rm = rm;
   }
 
   /*****************************************************************************/

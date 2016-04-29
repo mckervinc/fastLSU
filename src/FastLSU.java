@@ -19,6 +19,7 @@ import java.util.*;
 public class FastLSU extends Application {
 
     public static void main(String[] args) {
+        warmup();
         launch(args);
     }
 
@@ -112,13 +113,29 @@ public class FastLSU extends Application {
                     if (sig >= 0.0 || sig <= 1.0) {
                         FastBHConcurrent fbhc = new FastBHConcurrent(size, sig, loc);
                         try {
-                            PValues[] arr = fbhc.load();
-                            long start = System.currentTimeMillis();
-                            ArrayList<Double> result = fbhc.solver(arr);
-                            long end = System.currentTimeMillis();
-                            System.out.println("==============================");
-                            System.out.println("Elapsed Time (ms): " + (end - start));
-                            ResultWindow.display(result, null, false, size);
+                            if (fbhc.fitsInMem()) {
+                                PValues[] arr = fbhc.load();
+                                long start = System.currentTimeMillis();
+                                ArrayList<Double> result = fbhc.solver(arr);
+                                long end = System.currentTimeMillis();
+                                System.out.println("==============================");
+                                System.out.println("Elapsed Time (ms): " + (end - start));
+                                ResultWindow.display(result, null, false, size);
+                            }
+                            else {
+                                long time = 0;
+                                ArrayList<Double> result = null;
+                                while (!fbhc.isFinished()) {
+                                    PValues[] arr = fbhc.loadInMem();
+                                    long start = System.currentTimeMillis();
+                                    result = fbhc.solverInMem(arr);
+                                    long end = System.currentTimeMillis();
+                                    time += (end - start);
+                                }
+                                System.out.println("==============================");
+                                System.out.println("Elapsed Time (ms): " + time);
+                                ResultWindow.display(result, null, false, size);
+                            }
                         } catch (Exception e) {e.printStackTrace();}
                     }
                     else errors.getChildren().add(a);
@@ -192,6 +209,7 @@ public class FastLSU extends Application {
         stage.show();
     }
 
+    // tokenizing check
     private boolean isDouble(String s) {
         if (s == null || s.length() == 0) return false;
         try {
@@ -199,5 +217,81 @@ public class FastLSU extends Application {
             return true;
         }
         catch (Exception e) {return false;}
+    }
+
+    // does random binomial given a certain probability
+    private static int flip(double probability) {
+        return (Math.random() < probability) ? 1 : 0;
+    }
+
+    // for JIT compilation optimization
+    private static void warmup() {
+        int m = (int)Math.pow(10, 6);
+        int numCores = Runtime.getRuntime().availableProcessors();
+        double alpha = 0.1;
+        double[][] chunks = new double[numCores][2];
+        double size = (double)m;
+        PValues[] result = new PValues[numCores];
+        FastBHConcurrent fbhc = new FastBHConcurrent(size, alpha, null);
+
+        // divide 1million numbers into cores chunks
+        for (int i = 0; i < numCores; i++) {
+            chunks[i][0] = Math.floor((size * i) / numCores);
+            chunks[i][1] = Math.floor((size * (i + 1)) / numCores - 1);
+        }
+
+        // load the values into a double array
+        int coreCount = 0;
+        PValues elem = new PValues(chunks[coreCount][1] - chunks[coreCount][0] + 1);
+        int elem_size = elem.size(), pointer = 0;
+        double rci = 0.0, sum = 0.0, p = 0.0, oldrci = 0.0;
+        for (int i = 0; i < m; i++) {
+            try {
+                p = Math.random() / Math.pow(10, flip(0.8));
+                oldrci = rci;
+                if (p < alpha) rci++;
+                elem.array[pointer] = p;
+                pointer++;
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                if (rci != oldrci) {
+                    elem.prime = oldrci;
+                    sum += oldrci;
+                    rci = 1.0;
+                }
+                else {
+                    elem.prime = rci;
+                    sum += rci;
+                    rci = 0.0;
+                }
+                result[coreCount] = elem;
+                oldrci = rci;
+                coreCount++;
+                if (coreCount == numCores) {
+                    
+                    break;
+                }
+                pointer = 1;
+                elem = new PValues(chunks[coreCount][1] - chunks[coreCount][0] + 1);
+                elem_size = elem.size();
+                elem.array[0] = p;
+            }
+        }
+
+        elem.prime = rci;
+        result[coreCount] = elem;
+        sum += rci;
+        fbhc.cSum(sum);
+
+        // process it one time
+        try {
+            ArrayList<Double> x = fbhc.solver(result);
+            x = null;
+            result = null;
+            fbhc = null;
+            elem = null;
+            chunks = null;
+        }
+        catch (Exception e) {e.printStackTrace();}
     }
 }

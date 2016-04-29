@@ -26,7 +26,7 @@ public class FastBHConcurrent{
   private PrintWriter tempFile;
   private BufferedReader buf;
   private ArrayList<String> prevLine;
-  public static ResourceMonitor rm;
+  public ResourceMonitor rm;
 
   public FastBHConcurrent(double mtg, double alpha, String filename) {
     // Find the number of cores available to the machine
@@ -51,7 +51,7 @@ public class FastBHConcurrent{
     ExecutorService executor = Executors.newFixedThreadPool(numCores);
     List<Future<PValues>> list = new ArrayList<Future<PValues>>();
     for (int i = 0; i < numCores; i++)
-      list.add(executor.submit(new WorkerThread(arr[i], mtg, alpha, "pool-1-thread-" + str(i+1))));
+      list.add(executor.submit(new WorkerThread(arr[i], mtg, alpha, "pool-1-thread-" + str(i+1), rm)));
 
     // get the result
     PValues[] union = new PValues[numCores];
@@ -292,7 +292,6 @@ public class FastBHConcurrent{
   throws IOException {
     // local variables
     PValues elem = new PValues(chunks[coreCount][1] - chunks[coreCount][0] + 1);
-    int size = elem.size();
     double rci = 0.0, sum = 0.0, p = 0.0, oldrci = 0.0;
 
     String line;
@@ -328,7 +327,6 @@ public class FastBHConcurrent{
           }
           pointer = 1;
           elem = new PValues(chunks[coreCount][1] - chunks[coreCount][0] + 1);
-          size = elem.size();
           elem.array[0] = p;
         }
       }
@@ -486,11 +484,8 @@ public class FastBHConcurrent{
 
   // Find the max array size that fits in memory
   private double limit() {
-    long max = Runtime.getRuntime().maxMemory();
-    long total = Runtime.getRuntime().totalMemory();
-    long free = Runtime.getRuntime().freeMemory();
-    long size = (max + total + free)/12;
-    return size - 0.01 * size;
+    double max = (double)Runtime.getRuntime().maxMemory()/10.0;
+    return max - 0.1 * max;
   }
 
   /*****************************************************************************/
@@ -535,7 +530,7 @@ public class FastBHConcurrent{
     return bigSize == 0.0;
   }
 
-  public double[][] theChunks() {
-    return chunks;
+  public void cSum(double sum) {
+    rm.changeSum(0, sum);
   }
 }
